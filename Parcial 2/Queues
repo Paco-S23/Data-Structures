@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+typedef struct {
+    int data[MAX];
+    int front;
+    int rear;
+    int count;
+} Queue;
+
+// Inicializar la cola
+void initQueue(Queue *q) {
+    q->front = 0;
+    q->rear = -1;
+    q->count = 0;
+}
+
+// Verificar si está vacía
+int isEmpty(Queue *q) {
+    return q->count == 0;
+}
+
+// Verificar si está llena
+int isFull(Queue *q) {
+    return q->count == MAX;
+}
+
+// Enqueue (insertar)
+void enqueue(Queue *q, int value) {
+    if (isFull(q)) {
+        printf("La cola está llena. No se puede encolar.\n");
+        return;
+    }
+    q->rear = (q->rear + 1) % MAX;
+    q->data[q->rear] = value;
+    q->count++;
+}
+
+// Dequeue (sacar)
+int dequeue(Queue *q) {
+    if (isEmpty(q)) {
+        printf("La cola está vacía. No se puede desencolar.\n");
+        return -1;
+    }
+    int value = q->data[q->front];
+    q->front = (q->front + 1) % MAX;
+    q->count--;
+    return value;
+}
+
+// Mostrar contenido de la cola
+void displayQueue(Queue *q) {
+    if (isEmpty(q)) {
+        printf("La cola está vacía.\n");
+        return;
+    }
+    printf("Contenido de la cola: ");
+    for (int i = 0; i < q->count; i++) {
+        int index = (q->front + i) % MAX;
+        printf("%d ", q->data[index]);
+    }
+    printf("\n");
+}
+
+// Programa principal
+int main() {
+    Queue q;
+    initQueue(&q);
+
+    int opcion, valor;
+
+    while (1) {
+        printf("\n--- MENU ---\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Mostrar cola\n");
+        printf("4. Salir\n");
+        printf("Elige una opción: ");
+        scanf("%d", &opcion);
+
+        switch (opcion) {
+            case 1:
+                printf("Ingresa un número para encolar: ");
+                scanf("%d", &valor);
+                enqueue(&q, valor);
+                displayQueue(&q);
+                break;
+
+            case 2:
+                valor = dequeue(&q);
+                if (valor != -1) {
+                    printf("Elemento desencolado: %d\n", valor);
+                }
+                displayQueue(&q);
+                break;
+
+            case 3:
+                displayQueue(&q);
+                break;
+
+            case 4:
+                exit(0);
+
+            default:
+                printf("Opción inválida.\n");
+        }
+    }
+    return 0;
+}
