@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Se define una estructura para guardar el paréntesis y su índice original
+typedef struct {
+    char caracter;
+    int indice;
+} ElementoPila;
+
+// Implementación de una pila simple
+#define MAX_TAM_PILA 1000
+ElementoPila pila[MAX_TAM_PILA];
+int tope = -1;
+
+// Funciones de la pila
+void push(char caracter, int indice) {
+    if (tope < MAX_TAM_PILA - 1) {
+        tope++;
+        pila[tope].caracter = caracter;
+        pila[tope].indice = indice;
+    } else {
+        // En un caso real, se manejaría el desbordamiento de la pila.
+        // Para este problema, asumimos que no ocurrirá.
+    }
+}
+
+ElementoPila pop() {
+    if (tope != -1) {
+        return pila[tope--];
+    }
+    // Retorna un elemento nulo si la pila está vacía
+    ElementoPila vacio = {'\0', -1};
+    return vacio;
+}
+
+int estaVacia() {
+    return tope == -1;
+}
+
+// Función para verificar si dos paréntesis son pareja
+int sonPareja(char apertura, char cierre) {
+    return (apertura == '(' && cierre == ')') ||
+           (apertura == '[' && cierre == ']') ||
+           (apertura == '{' && cierre == '}');
+}
+
+// Función principal que procesa la cadena
+void verificarParentesis(const char* texto) {
+    tope = -1; // Reiniciar la pila para cada prueba
+    int error_encontrado = 0;
+    int longitud = strlen(texto);
+
+    for (int i = 0; i < longitud; i++) {
+        char actual = texto[i];
+
+        // Si es un paréntesis de apertura, se añade a la pila
+        if (actual == '(' || actual == '[' || actual == '{') {
+            push(actual, i);
+        }
+        // Si es un paréntesis de cierre
+        else if (actual == ')' || actual == ']' || actual == '}') {
+            // Error: Cierre con pila vacía
+            if (estaVacia()) {
+                printf("ERROR %d\n", i);
+                error_encontrado = 1;
+                break;
+            }
+
+            ElementoPila ultimo_apertura = pop();
+
+            // Error: Pareja no coincide
+            if (!sonPareja(ultimo_apertura.caracter, actual)) {
+                printf("ERROR %d\n", i);
+                error_encontrado = 1;
+                break;
+            }
+        }
+        // Otros caracteres se ignoran
+    }
+
+    // Si no se encontraron errores durante el recorrido
+    if (!error_encontrado) {
+        // Si la pila está vacía al final, todo está correcto
+        if (estaVacia()) {
+            printf("OK\n");
+        } else {
+            // Error: Quedaron paréntesis de apertura sin cerrar
+            // La instrucción pide el índice del *primer* no coincidente,
+            // que es el que está en el fondo de la pila.
+            printf("ERROR %d\n", pila[0].indice);
+        }
+    }
+}
+
+int main() {
+    printf("--- Pruebas ---\n\n");
+
+    // Prueba 1: Caso de éxito
+    printf("Entrada: ([])\n");
+    printf("Salida: ");
+    verificarParentesis("([])");
+    printf("\n");
+
+    // Prueba 2: Pareja no coincidente
+    printf("Entrada: ([)]\n");
+    printf("Salida: ");
+    verificarParentesis("([)]");
+    printf("\n");
+
+    // Prueba 3: Cierre con pila vacía
+    printf("Entrada: }[]\n");
+    printf("Salida: ");
+    verificarParentesis("}[]");
+    printf("\n");
+
+    // Prueba 4: Finaliza con la pila no vacía
+    printf("Entrada: abc{defghij[k\n");
+    printf("Salida: ");
+    verificarParentesis("abc{defghij[k");
+    printf("\n");
+
+    // Prueba 5: Caso del ejemplo
+    printf("Entrada: abc{defghij[}k\n");
+    printf("Salida: ");
+    verificarParentesis("abc{defghij[}k");
+    printf("\n");
+
+    return 0;
+}
