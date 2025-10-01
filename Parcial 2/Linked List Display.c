@@ -95,7 +95,6 @@ int main(void) {
         printf("2. Dequeue\n");
         printf("3. Mostrar fila\n");
         printf("4. Salir\n");
-        printf("5. Opcion\n");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -115,10 +114,6 @@ int main(void) {
 
             case 4:
                 printf("Saliendo\n");
-                break;
-
-            case 5:
-                printf("Opcion invalida\n");
                 break;
         }
     } while (choice != 4);
