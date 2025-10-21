@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+// Función para imprimir la matriz de adyacencia
+void printAdjacencyMatrix(int matrix[4][4], char* vertices) {
+    printf("  ");
+    for (int i = 0; i < 4; i++) {
+        printf("%c ", vertices[i]);
+    }
+    printf("\n");
+
+    for (int i = 0; i < 4; i++) {
+        printf("%c ", vertices[i]);
+        for (int j = 0; j < 4; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    // Definimos los vértices para las etiquetas
+    char vertices[] = {'A', 'B', 'C', 'D'};
+
+    // Creamos la matriz de adyacencia 4x4
+    // Vértices mapeados a índices: A=0, B=1, C=2, D=3
+    int adjMatrix[4][4] = {
+        {0, 1, 1, 0},  // Conexiones de A: con B y C
+        {1, 0, 0, 1},  // Conexiones de B: con A y D
+        {1, 0, 0, 0},  // Conexiones de C: con A
+        {0, 1, 0, 0}   // Conexiones de D: con B
+    };
+
+    printf("Matriz de Adyacencia (No Dirigido):\n");
+    printAdjacencyMatrix(adjMatrix, vertices);
+
+    return 0;
+}
