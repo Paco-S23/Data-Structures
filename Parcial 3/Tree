@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define MAX_ELEMENTS 11 
+#define MAX_ELEMENTS 11
 
 typedef struct {
     char nodes[MAX_ELEMENTS];
@@ -21,7 +21,7 @@ int main() {
     tree.nodes[7] = 'A';
     tree.nodes[8] = 'C';
     tree.nodes[9] = 'E';
-    tree.nodes[10] = 'K';
+    tree.nodes[10] = 'K';//<-- this node is added
 
     tree.numElements = 11;
     // We just need to add the last element 
