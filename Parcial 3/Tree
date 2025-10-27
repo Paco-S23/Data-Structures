@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+#define MAX_ELEMENTS 11 
+
+typedef struct {
+    char nodes[MAX_ELEMENTS];
+    int numElements;
+} BinaryTree;
+
+int main() {
+    BinaryTree tree;
+
+    // Load nodes into the array as shown in the figure
+    tree.nodes[0] = 'G';
+    tree.nodes[1] = 'D';
+    tree.nodes[2] = 'I';
+    tree.nodes[3] = 'B';
+    tree.nodes[4] = 'F';
+    tree.nodes[5] = 'H';
+    tree.nodes[6] = 'J';
+    tree.nodes[7] = 'A';
+    tree.nodes[8] = 'C';
+    tree.nodes[9] = 'E';
+    tree.nodes[10] = 'K';
+
+    tree.numElements = 11;
+    // We just need to add the last element 
+    // Print the tree nodes
+    printf("Tree elements:\n");
+    for (int i = 0; i < tree.numElements; i++) {
+        printf("Index %d: %c\n", i, tree.nodes[i]);
+    }
+
+    return 0;
+}
