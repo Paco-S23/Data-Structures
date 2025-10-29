@@ -2,11 +2,9 @@
 
 #define MAX_HEAP_SIZE 100
 
-// --- Variables Globales ---
 int heap[MAX_HEAP_SIZE];
 int heapSize = 0;
 
-// --- Prototipos de Funciones ---
 void swap(int *a, int *b);
 void reHeapUp(int i);
 void insert(int item);
@@ -15,10 +13,7 @@ void reHeapDown(int i);
 int removeMax(void);
 void printTreeStructure(void);
 
-
-// --- Función Principal ---
 int main() {
-    // Secuencia de enteros a insertar
     int data[] = {10, 40, 15, 60, 50, 25, 5, 80};
     int n = sizeof(data) / sizeof(data[0]);
     int i;
@@ -37,7 +32,6 @@ int main() {
     printf("\nEstructura del Arbol (mapeo Arreglo-Arbol):\n");
     printTreeStructure();
 
-    // Remover el elemento maximo K veces
     int K = 3;
     printf("\n--- Fase de Eliminacion (K = %d) ---\n", K);
     for (i = 0; i < K; i++) {
@@ -64,52 +58,29 @@ int main() {
     return 0;
 }
 
-/**
- * @brief Intercambia dos valores enteros.
- * @param a Puntero al primer entero.
- * @param b Puntero al segundo entero.
- */
 void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-/**
- * @brief Restaura la propiedad del Max-Heap subiendo un elemento desde el indice i.
- * Se usa despues de una insercion.
- * @param i Indice del elemento a "flotar" hacia arriba.
- */
 void reHeapUp(int i) {
-    // Mientras el nodo no sea la raiz y sea mayor que su padre
     while (i > 0 && heap[i] > heap[(i - 1) / 2]) {
-        // Intercambiar el nodo con su padre
         swap(&heap[i], &heap[(i - 1) / 2]);
-        // Moverse al indice del padre para continuar la revision
         i = (i - 1) / 2;
     }
 }
 
-/**
- * @brief Inserta un nuevo elemento en el heap.
- * @param item El valor entero a insertar.
- */
 void insert(int item) {
     if (heapSize >= MAX_HEAP_SIZE) {
         printf("Error: Heap lleno.\n");
         return;
     }
-    // 1. Anadir el elemento al final del arreglo
     heap[heapSize] = item;
-    // 2. Aumentar el tamano del heap
     heapSize++;
-    // 3. Reordenar hacia arriba (reHeapUp) para mantener la propiedad del heap
     reHeapUp(heapSize - 1);
 }
 
-/**
- * @brief Imprime el contenido del heap en formato de arreglo.
- */
 void showHeap(void) {
     printf("[ ");
     for (int i = 0; i < heapSize; i++) {
@@ -118,66 +89,42 @@ void showHeap(void) {
     printf("]\n");
 }
 
-/**
- * @brief Restaura la propiedad del Max-Heap bajando un elemento desde el indice i.
- * Se usa despues de eliminar el maximo.
- * @param i Indice del elemento a "hundir".
- */
 void reHeapDown(int i) {
-    int largest = i;          // Suponemos que el padre es el mas grande
-    int leftChild = 2 * i + 1;  // Indice del hijo izquierdo
-    int rightChild = 2 * i + 2; // Indice del hijo derecho
+    int largest = i;
+    int leftChild = 2 * i + 1;
+    int rightChild = 2 * i + 2;
 
-    // Si el hijo izquierdo existe y es mayor que el padre actual
     if (leftChild < heapSize && heap[leftChild] > heap[largest]) {
         largest = leftChild;
     }
 
-    // Si el hijo derecho existe y es mayor que el mas grande hasta ahora
     if (rightChild < heapSize && heap[rightChild] > heap[largest]) {
         largest = rightChild;
     }
 
-    // Si el mas grande no es el padre original, intercambiar y seguir bajando
     if (largest != i) {
         swap(&heap[i], &heap[largest]);
-        // Llamada recursiva en el subarbol afectado
         reHeapDown(largest);
     }
 }
 
-/**
- * @brief Remueve y retorna el elemento maximo del heap (la raiz).
- * @return El valor del elemento maximo.
- */
 int removeMax(void) {
     if (heapSize <= 0) {
-        return -1; // O manejar el error de otra forma
+        return -1;
     }
     if (heapSize == 1) {
         heapSize--;
         return heap[0];
     }
 
-    // 1. Guardar el valor maximo (la raiz)
     int maxItem = heap[0];
-
-    // 2. Mover el ultimo elemento a la raiz
     heap[0] = heap[heapSize - 1];
-
-    // 3. Reducir el tamano del heap
     heapSize--;
-
-    // 4. Reordenar hacia abajo (reHeapDown) desde la raiz para restaurar la propiedad
     reHeapDown(0);
 
     return maxItem;
 }
 
-/**
- * @brief Proporciona una funcion para imprimir cada nodo con sus hijos izquierdo/derecho
- * (usando indices) para reforzar el mapeo de arreglo a arbol.
- */
 void printTreeStructure(void) {
     if(heapSize == 0) {
         printf("El arbol esta vacio.\n");
